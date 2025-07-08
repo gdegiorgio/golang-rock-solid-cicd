@@ -1,0 +1,47 @@
+version: 2
+
+project_name: hello-cli
+dist: bin
+builds:
+  - id: hello-cli
+    main: main.go
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+  - id: hello-cli-win
+    main: main.go
+    goos:
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - id: default
+    ids: [hello-cli]
+    formats: [tar.gz]
+    name_template: "hello-cli_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE.txt
+      - README.md
+  - id: hello-cli-win
+    ids: [hello-cli-win]
+    formats: [zip]
+    name_template: "hello-cli_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE.txt
+      - README.md
+
+release:
+  github:
+    owner: gdegiorgio
+    name: hello-cli
+changelog:
+  use: git
