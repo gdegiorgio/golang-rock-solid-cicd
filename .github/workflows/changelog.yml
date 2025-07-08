@@ -1,0 +1,30 @@
+name: Generate Changelog
+
+on:
+  push:
+    tags:
+      - v[0-9]+.[0-9]+.[0-9]+
+
+jobs:
+  changelog:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate and Commit Changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          tag: ${{ github.ref_name }}
+          commitMessage: "docs(changelog): update for ${{ github.ref_name }}"
+          outputFile: "CHANGELOG.md"
+
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ github.ref_name }}
+          bodyFile: "CHANGELOG.md"
+          token: ${{ secrets.GH_TOKEN }}
