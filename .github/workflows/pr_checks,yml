@@ -1,0 +1,36 @@
+name: Pull Request checks
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: 🔨 Build , Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.24.3"
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Build project
+        run: go build -v ./...
+
+      - name: Run tests
+        run: go test -v ./...
+        
+      - name: Lint code
+        uses: golangci/golangci-lint-action@v8
+        with:
+          version: v2.1
+
+      - name: Lint Pull Request Title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
