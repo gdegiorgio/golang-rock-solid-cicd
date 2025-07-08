@@ -7,12 +7,22 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var name string
+
 var rootCmd = &cobra.Command{
 	Use:   "hello-cli",
 	Short: "A simple CLI that says hello",
 	Run: func(cmd *cobra.Command, args []string) {
-		cmd.Println("Hello, world!")
+		if name != "" {
+			cmd.Printf("Hello, %s!\n", name)
+		} else {
+			cmd.Println("Hello, world!")
+		}
 	},
+}
+
+func init() {
+	rootCmd.Flags().StringVar(&name, "name", "", "Custom name to include in greeting")
 }
 
 func main() {
