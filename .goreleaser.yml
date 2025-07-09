@@ -38,6 +38,6 @@ archives:
 release:
   github:
     owner: gdegiorgio
-    name: hello-cli
+    name: golang-rock-solid-cicd
 changelog:
   use: git
